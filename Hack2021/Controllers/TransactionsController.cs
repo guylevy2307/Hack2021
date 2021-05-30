@@ -46,6 +46,7 @@ namespace Hack2021.Controllers
         // GET: Transactions/Create
         public IActionResult Create()
         {
+            ViewBag.cardsList = new SelectList(_context.CreditCard.Select(a=>a.Number).ToList());
             return View();
         }
 
@@ -54,8 +55,10 @@ namespace Hack2021.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionID,Amount,TransactionDate,Status,mId")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("TransactionID,Amount,TransactionDate,Status,mId,CName")] Transaction transaction)
         {
+            transaction.CreditCardInfo= _context.CreditCard.Find((transaction.CardNumber));
+            transaction.Status = Transaction.StatusEnum.AUTO;
             if (ModelState.IsValid)
             {
                 _context.Add(transaction);
@@ -145,9 +148,16 @@ namespace Hack2021.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public JsonResult GetCardsByPrefix(string prefix)
+        {
+            return Json(_context.CreditCard.Where(c => c.Number.StartsWith(prefix)).Select(a => new { value = a.Number }), System.Web.Mvc.JsonRequestBehavior.AllowGet);
+
+        }
         private bool TransactionExists(int id)
         {
             return _context.Transaction.Any(e => e.TransactionID == id);
         }
     }
 }
+

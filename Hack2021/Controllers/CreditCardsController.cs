@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Hack.Model;
 using Hack2021.Data;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Hack2021.Controllers
 {
-    public class CreditCardsController : Controller
+    public class CreditCardsController : Microsoft.AspNetCore.Mvc.Controller
     {
         private readonly Hack2021Context _context;
 
@@ -43,15 +42,19 @@ namespace Hack2021.Controllers
             return View(creditCard);
         }
 
+
         // GET: CreditCards/Create
+       
         public IActionResult Create()
         {
+         
             return View();
         }
 
         // POST: CreditCards/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Number,ExpirationDate,CVV")] CreditCard creditCard)
@@ -149,5 +152,6 @@ namespace Hack2021.Controllers
         {
             return _context.CreditCard.Any(e => e.Number == id);
         }
+        
     }
 }

@@ -17,7 +17,9 @@ namespace Hack.Model
 
         public StatusEnum Status { get; set; }
 
-        public CreditCard CreditCardInfo { get; set; }
+        public String CardNumber  { get; set; }
+
+        public virtual CreditCard CreditCardInfo { get; set; }
 
         public String mId { get; set; }
 

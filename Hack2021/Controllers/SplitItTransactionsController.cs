@@ -64,6 +64,7 @@ namespace Hack2021.Controllers
             }
             return View(splitItTransaction);
         }
+        
 
         // GET: SplitItTransactions/Edit/5
         public async Task<IActionResult> Edit(string id)
