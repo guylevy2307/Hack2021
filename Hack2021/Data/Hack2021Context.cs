@@ -17,5 +17,7 @@ namespace Hack2021.Data
         public DbSet<Hack.Model.CreditCard> CreditCard { get; set; }
 
         public DbSet<Hack.Model.Transaction> Transaction { get; set; }
+
+        public DbSet<Hack.Model.SplitItTransaction> SplitItTransaction { get; set; }
     }
 }
