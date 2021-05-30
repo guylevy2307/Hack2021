@@ -19,6 +19,8 @@ namespace Hack.Model
 
         public CreditCard CreditCardInfo { get; set; }
 
+        public String mId { get; set; }
+
         public enum StatusEnum 
         { 
             AUTO,

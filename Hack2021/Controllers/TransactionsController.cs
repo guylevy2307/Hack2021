@@ -54,7 +54,7 @@ namespace Hack2021.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionID,Amount,TransactionDate,Status")] Transaction transaction)
+        public async Task<IActionResult> Create([Bind("TransactionID,Amount,TransactionDate,Status,mId")] Transaction transaction)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace Hack2021.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TransactionID,Amount,TransactionDate,Status")] Transaction transaction)
+        public async Task<IActionResult> Edit(int id, [Bind("TransactionID,Amount,TransactionDate,Status,mId")] Transaction transaction)
         {
             if (id != transaction.TransactionID)
             {
