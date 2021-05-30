@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Hack.Model;
 using Hack2021.Data;
+using static Hack.Model.Transaction;
 
 namespace Hack2021.Controllers
 {
     public class TransactionsController : Controller
     {
         private readonly Hack2021Context _context;
+        private List<string> mid_list_auto = new List<string>();
 
         public TransactionsController(Hack2021Context context)
         {
             _context = context;
+            this.mid_list_auto.Add("Stripe");
+            this.mid_list_auto.Add("Dwolla");
+            this.mid_list_auto.Add("Braintree");
         }
 
         // GET: Transactions
@@ -42,6 +47,26 @@ namespace Hack2021.Controllers
 
             return View(transaction);
         }
+        public ActionResult Cancel(int? id)
+        {
+            Transaction model = _context.Transaction.FirstOrDefault(t => t.TransactionID == id);
+            if (model != null)
+                return PartialView("_Cancel", model);
+            else
+                return View();
+        }
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult Cancel(Transaction model)
+        {
+            //validate user  
+            if (!ModelState.IsValid)
+                return PartialView("_CreateEdit", model);
+
+
+            //save user into database   
+            return RedirectToAction("index");
+        }
 
         // GET: Transactions/Create
         public IActionResult Create()
@@ -50,20 +75,26 @@ namespace Hack2021.Controllers
             return View();
         }
 
-        // POST: Transactions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TransactionID,Amount,TransactionDate,Status,mId,CName")] Transaction transaction)
+        public async Task<IActionResult> Create(Transaction transaction)
         {
-            transaction.CreditCardInfo= _context.CreditCard.Find((transaction.CardNumber));
-            transaction.Status = Transaction.StatusEnum.AUTO;
-            if (ModelState.IsValid)
+            if (_context.Transaction.FirstOrDefault(t => t.TransactionID == transaction.TransactionID) == null)
             {
-                _context.Add(transaction);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (ModelState.IsValid)
+                {
+                    Transaction newT = new Transaction()
+                    {
+                        TransactionDate = transaction.TransactionDate,
+                        Amount = transaction.Amount,
+                        mId = transaction.mId,
+                        Status = Transaction.StatusEnum.AUTO,
+                        CreditCardInfo = transaction.CreditCardInfo,
+                    };
+                    _context.Add(transaction);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(transaction);
         }
@@ -81,6 +112,7 @@ namespace Hack2021.Controllers
             {
                 return NotFound();
             }
+            ViewBag.statusList = new SelectList(Enum.GetNames(typeof(StatusEnum)));
             return View(transaction);
         }
 
@@ -158,6 +190,42 @@ namespace Hack2021.Controllers
         {
             return _context.Transaction.Any(e => e.TransactionID == id);
         }
+        /*
+         public IActionResult SplitIt()
+         {
+             return View();
+         }
+
+         [HttpPost]
+         [ValidateAntiForgeryToken]
+         public async Task<IActionResult> SplitIt(Transaction transaction)
+         {
+
+             if (this.mid_list_auto.Contains(transaction.mId))
+             {
+                 //Guy Function
+             }
+             else
+             {
+
+                  string userName = "APIUser000032868";
+                  string password = "hY9yHNwYd7c4H6jIEwrcyxOwVHtWW02j41MsCqefmMSd7gvkRO";
+                  string apiKey = "hY9yHNwYd7c4H6jIEwrcyxOwVHtWW02j41MsCqefmMSd7gvkRO";
+                  string name = transaction.CreditCardInfo.FullName;
+                  string CardNumber = transaction.CreditCardInfo.Number;
+                  string CardCvv = transaction.CreditCardInfo.CVV;
+                  string CardExpMonth = transaction.TransactionDate.Month.ToString();
+                  string CardExpYear = transaction.TransactionDate.Year.ToString();   
+
+                      //Close the current and open new Transaction in split it 
+                  }
+
+              }
+
+                 return View(transaction);
+             }
+         }
+        */
     }
 }
 

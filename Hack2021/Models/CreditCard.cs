@@ -14,5 +14,8 @@ namespace Hack.Model
         public DateTime ExpirationDate { get; set; }
 
         public string CVV { get; set; }
+
+        public string FullName{ get; set; }
+        public string email{ get; set; }
     }
 }

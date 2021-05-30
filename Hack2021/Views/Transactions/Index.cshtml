@@ -13,6 +13,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.TransactionID)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Amount)
             </th>
             <th>
@@ -20,15 +23,13 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Status)
+
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.mId)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
@@ -40,14 +41,28 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.mId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TransactionID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TransactionID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TransactionID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.TransactionID">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.TransactionID">Details</a>
+                @if (item.Status.ToString() == "AUTO")
+                {
+                    <a asp-action="Delete" asp-route-id="@item.TransactionID">Cancel</a>
+                }
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
+
+<script src="https://checkout.sandbox.splitit.com/Popup/v1/pf-embedded.js"></script>
+
+<script src="lib\jquery\dist\jquery.js"></script>
+<script src="~\lib\jquery\dist\jquery.min.js"></script>
+
+
+@section Scripts{
+    <script src="~\js\site.js" asp-append-version="true"></script>
+
+
+}
+
+

@@ -8,6 +8,11 @@ namespace Hack.Model
 {
     public class Transaction
     {
+        public Transaction()
+        {
+            this.Status = StatusEnum.AUTO;
+
+        }
         [Key]
         public int TransactionID { get; set; }
 

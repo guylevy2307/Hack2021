@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Hack2021.Data;
+using Splitit.SDK.Client.Api;
+using Splitit.SDK.Client.Model;
+
 
 namespace Hack2021
 {
@@ -57,6 +60,10 @@ namespace Hack2021
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
         }
+
+      
     }
 }
