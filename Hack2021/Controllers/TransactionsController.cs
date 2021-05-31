@@ -47,6 +47,22 @@ namespace Hack2021.Controllers
 
             return View(transaction);
         }
+        public async Task<IActionResult> DetailsBefor(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var transaction = await _context.Transaction
+                .FirstOrDefaultAsync(m => m.TransactionID == id);
+            if (transaction == null)
+            {
+                return NotFound();
+            }
+
+            return View(transaction);
+        }
         public ActionResult Cancel(int? id)
         {
             Transaction model = _context.Transaction.FirstOrDefault(t => t.TransactionID == id);
@@ -214,7 +230,16 @@ namespace Hack2021.Controllers
 
                  return View(transaction);
             }
-        
+
+
+        public async Task<IActionResult> goToSplit(int id)
+        {
+            return RedirectToAction("CreateSplit", "SplitItTransactions", new { id = 5 });
+
+        }
+
+
+
     }
 }
 

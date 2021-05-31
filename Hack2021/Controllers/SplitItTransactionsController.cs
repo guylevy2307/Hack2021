@@ -65,17 +65,17 @@ namespace Hack2021.Controllers
             }
             return View(splitItTransaction);
         }
-
-        public async Task<IActionResult> CreateSplit(int tokenNumbeer, int numberOfPay)
+        [HttpPost]
+        public async Task<IActionResult> CreateSplit(int tokenNumber, int number)
         {
-           Transaction token= _context.Transaction.Find(tokenNumbeer);
+           Transaction token= _context.Transaction.Find(number);
             SplitItTransaction temp = new SplitItTransaction();
-            temp.NumPayments = numberOfPay;
+            temp.NumPayments = number;
             temp.TotalAmount = token.Amount;
             temp.TransactionID = token.TransactionID.ToString();
             DateTime date = token.TransactionDate;
-            double onePay = token.Amount / numberOfPay;
-            for (int i = 1; i <= numberOfPay; i++)
+            double onePay = token.Amount / number;
+            for (int i = 1; i <= number; i++)
             {
                 SplitItTransaction.Payment tamPay = new SplitItTransaction.Payment();
                 tamPay.TransactionID= token.TransactionID.ToString();
@@ -85,7 +85,7 @@ namespace Hack2021.Controllers
                 date.AddMonths(1);
             }
 
-            _context.Add(temp);
+            _context.SplitItTransaction.Add(temp);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
