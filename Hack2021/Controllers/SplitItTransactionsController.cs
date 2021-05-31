@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Hack.Model;
 using Hack2021.Data;
+using Splitit.SDK.Client.Model;
 
 namespace Hack2021.Controllers
 {
@@ -64,7 +65,7 @@ namespace Hack2021.Controllers
             }
             return View(splitItTransaction);
         }
-        
+
 
         // GET: SplitItTransactions/Edit/5
         public async Task<IActionResult> Edit(string id)
@@ -150,5 +151,10 @@ namespace Hack2021.Controllers
         {
             return _context.SplitItTransaction.Any(e => e.TransactionID == id);
         }
+
+
+
     }
+
+    
 }

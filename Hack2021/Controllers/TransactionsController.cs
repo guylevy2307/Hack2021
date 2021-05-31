@@ -83,15 +83,16 @@ namespace Hack2021.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Transaction newT = new Transaction()
-                    {
-                        TransactionDate = transaction.TransactionDate,
-                        Amount = transaction.Amount,
-                        mId = transaction.mId,
-                        Status = Transaction.StatusEnum.AUTO,
-                        CreditCardInfo = transaction.CreditCardInfo,
-                    };
-                    _context.Add(transaction);
+                    Transaction newT = new Transaction();
+
+                    newT.TransactionDate = transaction.TransactionDate;
+                    newT.Amount = transaction.Amount;
+                    newT.mId = transaction.mId;
+                    newT.Status = Transaction.StatusEnum.AUTO;
+                    newT.CardNumber = transaction.CardNumber;
+                    newT.CreditCardInfo = _context.CreditCard.Find(transaction.CardNumber);
+                   
+                    _context.Add(newT);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -190,42 +191,38 @@ namespace Hack2021.Controllers
         {
             return _context.Transaction.Any(e => e.TransactionID == id);
         }
-        /*
-         public IActionResult SplitIt()
+        
+         /*public IActionResult SplitIt()
          {
              return View();
-         }
+         }*/
 
-         [HttpPost]
-         [ValidateAntiForgeryToken]
-         public async Task<IActionResult> SplitIt(Transaction transaction)
-         {
-
-             if (this.mid_list_auto.Contains(transaction.mId))
-             {
-                 //Guy Function
-             }
+        
+        public async Task<IActionResult> SplitIt(int id)
+        {
+            Transaction transaction = _context.Transaction.Find(id);
+            if (this.mid_list_auto.Contains(transaction.mId))
+            {
+                SDK_splitIt.CreateSplit(transaction, "5");
+                return RedirectToAction(nameof(Index));
+            }
+        
              else
              {
 
-                  string userName = "APIUser000032868";
-                  string password = "hY9yHNwYd7c4H6jIEwrcyxOwVHtWW02j41MsCqefmMSd7gvkRO";
-                  string apiKey = "hY9yHNwYd7c4H6jIEwrcyxOwVHtWW02j41MsCqefmMSd7gvkRO";
+                String email = transaction.CreditCardInfo.email;
                   string name = transaction.CreditCardInfo.FullName;
                   string CardNumber = transaction.CreditCardInfo.Number;
                   string CardCvv = transaction.CreditCardInfo.CVV;
                   string CardExpMonth = transaction.TransactionDate.Month.ToString();
-                  string CardExpYear = transaction.TransactionDate.Year.ToString();   
-
-                      //Close the current and open new Transaction in split it 
-                  }
-
+                  string CardExpYear = transaction.TransactionDate.Year.ToString();
+                SDK_splitIt.TestApi( name, email, CardNumber, CardCvv, CardExpMonth, CardExpYear);
               }
 
                  return View(transaction);
              }
          }
-        */
+        
     }
 }
 
