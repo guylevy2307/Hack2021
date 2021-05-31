@@ -209,14 +209,7 @@ namespace Hack2021.Controllers
         
              else
              {
-
-                String email = transaction.CreditCardInfo.email;
-                  string name = transaction.CreditCardInfo.FullName;
-                  string CardNumber = transaction.CreditCardInfo.Number;
-                  string CardCvv = transaction.CreditCardInfo.CVV;
-                  string CardExpMonth = transaction.TransactionDate.Month.ToString();
-                  string CardExpYear = transaction.TransactionDate.Year.ToString();
-                SDK_splitIt.TestApi( name, email, CardNumber, CardCvv, CardExpMonth, CardExpYear);
+                return Redirect("https://checkout.sandbox.splitit.com/v3/5?token=d4abc55e-5fd6-4879-8ea8-c169408f2efb&culture=en-US");
               }
 
                  return View(transaction);

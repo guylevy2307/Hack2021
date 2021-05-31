@@ -25,12 +25,18 @@
                 @Html.DisplayNameFor(model => model.Status)
 
             </th>
+            <th>
+
+            </th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
         <tr>
+            <td>
+                @Html.DisplayNameFor(model => model.TransactionID)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Amount)
             </td>
@@ -45,7 +51,7 @@
                 <a asp-action="Details" asp-route-id="@item.TransactionID">Details</a>
                 @if (item.Status.ToString() == "AUTO")
                 {
-                    <a asp-action="Delete" asp-route-id="@item.TransactionID">Cancel</a>
+                    <a asp-action="Delete" asp-route-id="@item.TransactionID" class="btn btn-danger">Cancel</a>
                 }
             </td>
         </tr>
