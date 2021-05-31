@@ -220,8 +220,7 @@ namespace Hack2021.Controllers
               }
 
                  return View(transaction);
-             }
-         }
+            }
         
     }
 }
