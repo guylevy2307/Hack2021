@@ -185,7 +185,30 @@ namespace Hack2021.Controllers
 
             return View(transaction);
         }
-
+     
+        public async Task<IActionResult> CreateSplit( string pay,string trans)
+        {
+            Transaction token = _context.Transaction.Find((int.Parse(trans)));
+            SplitItTransaction temp = new SplitItTransaction();
+            temp.NumPayments = Int32.Parse(pay);
+            temp.TotalAmount = token.Amount;
+            temp.TransactionID = token.TransactionID.ToString();
+            DateTime date = token.TransactionDate;
+            double onePay = token.Amount / Int32.Parse(pay);
+            for (int i = 1; i <= Int32.Parse(pay); i++)
+            {
+                SplitItTransaction.Payment tamPay = new SplitItTransaction.Payment();
+                tamPay.TransactionID = (token.TransactionID.ToString().GetHashCode()+ pay.GetHashCode()).ToString();
+                tamPay.DueDate = date;
+                tamPay.Amount = onePay;
+                temp.Payments.Add(tamPay);
+                date.AddMonths(1);
+            }
+            _context.SplitItTransaction.Add(temp);
+            _context.Transaction.Remove(token);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
         // POST: Transactions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -219,16 +242,16 @@ namespace Hack2021.Controllers
             Transaction transaction = _context.Transaction.Find(id);
             if (this.mid_list_auto.Contains(transaction.mId))
             {
-                SDK_splitIt.CreateSplit(transaction, "5");
-                return RedirectToAction(nameof(Index));
+              //  SDK_splitIt.CreateSplit(transaction, "5");
+                return RedirectToAction("DetailsBefor", new { id = id });
             }
         
              else
              {
-                return Redirect("https://checkout.sandbox.splitit.com/v3/5?token=d4abc55e-5fd6-4879-8ea8-c169408f2efb&culture=en-US");
+                return Redirect("https://checkout.sandbox.splitit.com/v3/5?token=807ba642-21d0-43d7-be92-f92c32519b19&culture=en-US");
               }
 
-                 return View(transaction);
+               
             }
 
 

@@ -38,12 +38,9 @@
     </dl>
     <span> Choose number of Payment:</span>
     <br />
-    <form>
+    <form asp-controller="Transactions" asp-action="CreateSplit">
 
-        @using (Html.BeginForm("CreateSplit", "SplitItTransactions", FormMethod.Post))
-        {
-            @Html.HiddenFor(model => model.TransactionID)
-            <select name="number" id="number">
+            <select name="pay" id="pay" onchange="getSelectValue();">
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
@@ -52,10 +49,10 @@
                 <option value="7">7</option>
                 <option value="8">8</option>
             </select>
+            <input type="text" name="trans" id="trans" value=@Html.DisplayFor(model => model.TransactionID)   hidden/>
+            <input id="send" type="submit" value="Join splitIt" />
 
-            <input type="submit" value="Join splitIt" />
-
-        }
+       
 
     </form>
 </div>
@@ -63,3 +60,13 @@
   
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+        function getSelectValue()
+        {
+            var selectedValue = document.getElementById("number1").value;
+            document.getElementById("pay").value = selectedValue;
+         
+        }
+        getSelectValue();
+</script>
