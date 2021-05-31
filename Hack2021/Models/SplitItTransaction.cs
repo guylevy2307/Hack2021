@@ -19,10 +19,12 @@ namespace Hack.Model
 
         public class Payment
         {
+
             [Key]
             public string TransactionID { get; set; }
             public DateTime DueDate { get; set; }
             public double Amount { get; set; }
+            
 
         }
     }

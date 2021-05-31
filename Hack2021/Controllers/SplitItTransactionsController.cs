@@ -66,6 +66,29 @@ namespace Hack2021.Controllers
             return View(splitItTransaction);
         }
 
+        public async Task<IActionResult> CreateSplit(int tokenNumbeer, int numberOfPay)
+        {
+           Transaction token= _context.Transaction.Find(tokenNumbeer);
+            SplitItTransaction temp = new SplitItTransaction();
+            temp.NumPayments = numberOfPay;
+            temp.TotalAmount = token.Amount;
+            temp.TransactionID = token.TransactionID.ToString();
+            DateTime date = token.TransactionDate;
+            double onePay = token.Amount / numberOfPay;
+            for (int i = 1; i <= numberOfPay; i++)
+            {
+                SplitItTransaction.Payment tamPay = new SplitItTransaction.Payment();
+                tamPay.TransactionID= token.TransactionID.ToString();
+                tamPay.DueDate = date;
+                tamPay.Amount = onePay;
+                temp.Payments.Add(tamPay);
+                date.AddMonths(1);
+            }
+
+            _context.Add(temp);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
         // GET: SplitItTransactions/Edit/5
         public async Task<IActionResult> Edit(string id)
